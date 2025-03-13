@@ -1,0 +1,80 @@
+[package]
+name = "pin-tester"
+version = "0.1.0"
+edition = "2024"
+
+[features]
+default = [
+    "gpio0-up",
+    "gpio1-up",
+    "gpio2-up",
+    "gpio3-up",
+    "gpio4-up",
+    "gpio5-up",
+    "gpio6-up",
+    "gpio7-up",
+    "gpio8-up",
+    "gpio9-up",
+    "gpio10-up",
+    "gpio20-up",
+    "gpio21-up",
+]
+gpio0-up = []
+gpio0-down = []
+gpio0-none = []
+gpio1-up = []
+gpio1-down = []
+gpio1-none = []
+gpio2-up = []
+gpio2-down = []
+gpio2-none = []
+gpio3-up = []
+gpio3-down = []
+gpio3-none = []
+gpio4-up = []
+gpio4-down = []
+gpio4-none = []
+gpio5-up = []
+gpio5-down = []
+gpio5-none = []
+gpio6-up = []
+gpio6-down = []
+gpio6-none = []
+gpio7-up = []
+gpio7-down = []
+gpio7-none = []
+gpio8-up = []
+gpio8-down = []
+gpio8-none = []
+gpio9-up = []
+gpio9-down = []
+gpio9-none = []
+gpio10-up = []
+gpio10-down = []
+gpio10-none = []
+gpio18-up = []
+gpio18-down = []
+gpio18-none = []
+gpio19-up = []
+gpio19-down = []
+gpio19-none = []
+gpio20-up = []
+gpio20-down = []
+gpio20-none = []
+gpio21-up = []
+gpio21-down = []
+gpio21-none = []
+
+[dependencies]
+embassy-executor = "0.7.0"
+embassy-time = { version = "0.4.0", features = ["generic-queue-8"] }
+esp-backtrace = { version = "0.15.1", features = [
+    "esp32c3",
+    "exception-handler",
+    "panic-handler",
+    "println",
+] }
+esp-hal = { version = "1.0.0-beta.0", features = ["esp32c3", "unstable"] }
+esp-hal-embassy = { version = "0.7.0", features = ["esp32c3"] }
+esp-println = { version = "0.13.1", features = ["esp32c3", "log"] }
+heapless = "0.8.0"
