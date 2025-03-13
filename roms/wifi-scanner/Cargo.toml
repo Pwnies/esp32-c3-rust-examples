@@ -1,0 +1,20 @@
+[package]
+name = "wifi-scanner"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+embassy-executor = { version = "0.7.0", features = ["task-arena-size-131072"] }
+embassy-time = { version = "0.4.0", features = ["generic-queue-8"] }
+esp-alloc = "0.7.0"
+esp-backtrace = { version = "0.15.1", features = [
+  "esp32c3",
+  "exception-handler",
+  "panic-handler",
+  "println",
+] }
+esp-hal = { version = "1.0.0-beta.0", features = ["esp32c3", "unstable"] }
+esp-hal-embassy = { version = "0.7.0", features = ["esp32c3"] }
+esp-println = { version = "0.13.1", features = ["esp32c3", "log"] }
+esp-wifi = { version = "0.13.0", features = ["esp32c3", "wifi"] }
+static_cell = "2.1.0"

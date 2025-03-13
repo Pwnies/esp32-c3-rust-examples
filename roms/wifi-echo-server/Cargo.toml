@@ -1,0 +1,23 @@
+[package]
+name = "wifi-echo-server"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+embassy-executor = "0.7.0"
+embassy-net = { version = "0.6.0", features = ["proto-ipv4", "dhcpv4", "tcp"] }
+embassy-sync = "0.6.2"
+embassy-time = { version = "0.4.0", features = ["generic-queue-8"] }
+embedded-io-async = "0.6.1"
+esp-alloc = "0.7.0"
+esp-backtrace = { version = "0.15.1", features = [
+  "esp32c3",
+  "exception-handler",
+  "panic-handler",
+  "println",
+] }
+esp-hal = { version = "1.0.0-beta.0", features = ["esp32c3", "unstable"] }
+esp-hal-embassy = { version = "0.7.0", features = ["esp32c3"] }
+esp-println = { version = "0.13.1", features = ["esp32c3", "log"] }
+esp-wifi = { version = "0.13.0", features = ["esp32c3", "wifi"] }
+static_cell = "2.1.0"

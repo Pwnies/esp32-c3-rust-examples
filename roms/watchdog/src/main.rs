@@ -7,19 +7,19 @@ use esp_backtrace as _;
 use esp_hal::{
     clock::CpuClock,
     config::WatchdogConfig,
-    gpio::{Input, InputConfig, Output, OutputConfig, Pull},
+    gpio::{Level, Output, OutputConfig},
 };
 use esp_hal_embassy::main;
 use esp_println::println;
 
 #[main]
-async fn main(spawner: Spawner) {
+async fn main(_spawner: Spawner) {
     esp_println::logger::init_logger_from_env();
     let peripherals = esp_hal::init(
         esp_hal::Config::default()
             .with_cpu_clock(CpuClock::max())
             .with_watchdog(WatchdogConfig::default().with_timg0(
-                esp_hal::config::WatchdogStatus::Enabled(esp_hal::time::Duration::millis_at_least(
+                esp_hal::config::WatchdogStatus::Enabled(esp_hal::time::Duration::from_millis(
                     1000,
                 )),
             )),
@@ -36,11 +36,7 @@ async fn main(spawner: Spawner) {
 
     wdt.feed();
 
-    let mut led = Output::new(
-        peripherals.GPIO8,
-        OutputConfig::default().with_level(esp_hal::gpio::Level::High),
-    )
-    .unwrap();
+    let mut led = Output::new(peripherals.GPIO8, Level::High, OutputConfig::default());
 
     wdt.feed();
 
