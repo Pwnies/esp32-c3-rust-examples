@@ -7,16 +7,6 @@ use esp_hal::{
 use esp_println::println;
 use esp_wifi::{EspWifiController, wifi::ScanConfig};
 
-// When you are okay with using a nightly compiler it's better to use https://docs.rs/static_cell/2.1.0/static_cell/macro.make_static.html
-macro_rules! mk_static {
-    ($t:ty,$val:expr) => {{
-        static STATIC_CELL: static_cell::StaticCell<$t> = static_cell::StaticCell::new();
-        #[deny(unused_attributes)]
-        let x = STATIC_CELL.uninit().write(($val));
-        x
-    }};
-}
-
 pub(crate) async fn run_scanner(
     timg0_timer0: esp_hal::timer::timg::Timer,
     rng: Rng,

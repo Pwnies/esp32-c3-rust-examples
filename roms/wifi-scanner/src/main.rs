@@ -1,6 +1,8 @@
 #![no_std]
 #![no_main]
 
+#[macro_use]
+mod macros;
 mod wifi;
 
 use embassy_executor::Spawner;

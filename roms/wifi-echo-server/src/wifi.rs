@@ -17,16 +17,6 @@ pub const MAX_CONNECTIONS: usize = 4;
 const SSID: &str = env!("SSID");
 const PASSWORD: &str = env!("PASSWORD");
 
-// When you are okay with using a nightly compiler it's better to use https://docs.rs/static_cell/2.1.0/static_cell/macro.make_static.html
-macro_rules! mk_static {
-    ($t:ty,$val:expr) => {{
-        static STATIC_CELL: static_cell::StaticCell<$t> = static_cell::StaticCell::new();
-        #[deny(unused_attributes)]
-        let x = STATIC_CELL.uninit().write(($val));
-        x
-    }};
-}
-
 pub(crate) fn init_wifi(
     spawner: &Spawner,
     timg0_timer0: esp_hal::timer::timg::Timer,
@@ -34,12 +24,12 @@ pub(crate) fn init_wifi(
     radio_clk: impl Peripheral<P = RADIO_CLK> + 'static,
     wifi: impl Peripheral<P = WIFI> + 'static,
 ) -> Stack<'static> {
-    let init = &*mk_static!(
+    let init = mk_static!(
         EspWifiController<'static>,
         esp_wifi::init(timg0_timer0, rng, radio_clk).unwrap()
     );
 
-    let (controller, wifi_interfaces) = esp_wifi::wifi::new(&init, wifi).unwrap();
+    let (controller, wifi_interfaces) = esp_wifi::wifi::new(init, wifi).unwrap();
 
     let config = embassy_net::Config::dhcpv4(Default::default());
 
