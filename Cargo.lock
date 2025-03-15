@@ -1130,7 +1130,6 @@ dependencies = [
  "embedded-io-async",
  "esp-hal",
  "esp-hal-embassy",
- "heapless",
 ]
 
 [[package]]
@@ -1144,6 +1143,17 @@ name = "unicode-ident"
 version = "1.0.18"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5a5f39404a5da50712a4c1eecf25e90dd62b613502b7e925fd4e4d19b5c96512"
+
+[[package]]
+name = "usb-serial-echo-server"
+version = "0.1.0"
+dependencies = [
+ "embassy-executor",
+ "embassy-time",
+ "embedded-io-async",
+ "esp-hal",
+ "esp-hal-embassy",
+]
 
 [[package]]
 name = "vcell"
