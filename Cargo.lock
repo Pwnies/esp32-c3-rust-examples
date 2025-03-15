@@ -1122,6 +1122,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "uart-echo-server"
+version = "0.1.0"
+dependencies = [
+ "embassy-executor",
+ "embassy-time",
+ "embedded-io-async",
+ "esp-hal",
+ "esp-hal-embassy",
+ "heapless",
+]
+
+[[package]]
 name = "ufmt-write"
 version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
