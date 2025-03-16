@@ -9,8 +9,7 @@ use core::future;
 
 use embassy_executor::Spawner;
 use embassy_net::{Stack, tcp::TcpSocket};
-use embassy_sync::blocking_mutex::raw::NoopRawMutex;
-use embassy_sync::mutex::Mutex;
+use embassy_sync::{blocking_mutex::raw::NoopRawMutex, mutex::Mutex};
 use embassy_time::{Duration, Timer};
 use embedded_io_async::Write;
 use esp_backtrace as _;

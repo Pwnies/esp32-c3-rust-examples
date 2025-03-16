@@ -1304,6 +1304,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "ws1812b-rmt"
+version = "0.1.0"
+dependencies = [
+ "embassy-executor",
+ "embassy-sync",
+ "embassy-time",
+ "esp-backtrace",
+ "esp-hal",
+ "esp-hal-embassy",
+ "esp-println",
+]
+
+[[package]]
 name = "xtensa-lx"
 version = "0.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
