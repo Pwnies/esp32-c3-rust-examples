@@ -14,7 +14,7 @@ use esp_hal::{
 use esp_hal_embassy::main;
 use esp_println::println;
 
-const PIXEL_COUNT: usize = 16;
+const NUM_PIXELS: usize = 16;
 
 #[derive(Copy, Clone, Debug)]
 struct Pixel {
@@ -27,13 +27,13 @@ impl Pixel {
     const BLACK: Pixel = Pixel { r: 0, g: 0, b: 0 };
 }
 
-type PixelArray = [Pixel; PIXEL_COUNT];
+type PixelArray = [Pixel; NUM_PIXELS];
 
 // Ideally we would write all of the pulsecodes at the same time
 // but the RMT only has space for up to 48 pulses, so we split up
 // the pulse codes by pixel. We store 25 pulsecodes, so we have
 // one extra for the end code.
-type PulseCodeArray = [[u32; 25]; PIXEL_COUNT];
+type PulseCodeArray = [[u32; 25]; NUM_PIXELS];
 
 #[main]
 async fn main(_spawner: Spawner) {
@@ -65,15 +65,15 @@ async fn main(_spawner: Spawner) {
         )
         .unwrap();
 
-    let mut pixels: PixelArray = [Pixel::BLACK; PIXEL_COUNT];
-    let mut pulsecodes: PulseCodeArray = [[PulseCode::empty(); 25]; PIXEL_COUNT];
+    let mut pixels: PixelArray = [Pixel::BLACK; NUM_PIXELS];
+    let mut pulsecodes: PulseCodeArray = [[PulseCode::empty(); 25]; NUM_PIXELS];
 
     loop {
         for p in &mut pixels {
             let d = rng.random();
-            p.r = (d as u8) & 0x7f;
-            p.g = ((d >> 8) as u8) & 0x7f;
-            p.b = ((d >> 16) as u8) & 0x7f;
+            p.r = (d as u8) & 0x7;
+            p.g = ((d >> 8) as u8) & 0x7;
+            p.b = ((d >> 16) as u8) & 0x7;
         }
 
         for (pixel, pulsecode) in pixels.iter_mut().zip(&mut pulsecodes) {

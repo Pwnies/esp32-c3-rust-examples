@@ -1,0 +1,18 @@
+[package]
+edition = "2024"
+name = "ws1812b-spi"
+version = "0.1.0"
+
+[dependencies]
+embassy-executor = "0.7.0"
+embassy-sync = "0.6.2"
+embassy-time = { version = "0.4.0", features = ["generic-queue-8"] }
+esp-backtrace = { version = "0.15.1", features = [
+  "esp32c3",
+  "exception-handler",
+  "panic-handler",
+  "println",
+] }
+esp-hal = { version = "1.0.0-beta.0", features = ["esp32c3", "unstable"] }
+esp-hal-embassy = { version = "0.7.0", features = ["esp32c3"] }
+esp-println = { version = "0.13.1", features = ["esp32c3", "log"] }
