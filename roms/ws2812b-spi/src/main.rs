@@ -23,12 +23,11 @@ impl Pixel {
 
 type PixelArray = [Pixel; NUM_PIXELS];
 // 3 colors per pixel, 4 bits of spi data per bit of color data
-// 4 extra bytes before and after for proper reset
 type PulseCodeArray = [u8; NUM_PIXELS * 3 * 4];
 
-// This corresponds to 350.018ns of high followed by 1050.05ns of low
+// This corresponds to 350ns of high followed by 1050s of low
 const ZERO_PULSE: u8 = 0b1000;
-// This corresponds to 700.035 ns of high followed by 700.035 ns of low
+// This corresponds to 700 ns of high followed by 700 ns of low
 const ONE_PULSE: u8 = 0b1100;
 
 #[main]
@@ -48,8 +47,14 @@ async fn main(_spawner: Spawner) {
     let (rx_buffer, rx_descriptors, tx_buffer, tx_descriptors) = dma_buffers!(3 * 3 * NUM_PIXELS);
     let dma_rx_buf = dma::DmaRxBuf::new(rx_descriptors, rx_buffer).unwrap();
     let dma_tx_buf = dma::DmaTxBuf::new(tx_descriptors, tx_buffer).unwrap();
-    // This makes 1 bit equal 350.018 ns
+    // The frequency 2857kHz is chosen because 1/2857kHz ~= 350.018 ns, which is pretty close to
+    // our desired pulse length
+    //
+    // However since this exact frequency is not supported by the spi and instead esp-hal will
+    // choose the closest matching frequency. This closest frequency is 80MHz/28, which corresponds
+    // to bit-length of exactly 350 ns.
     let spi_config = spi::master::Config::default().with_frequency(Rate::from_khz(2857));
+
     let mut spidma = spi::master::Spi::new(peripherals.SPI2, spi_config)
         .unwrap()
         .with_mosi(peripherals.GPIO10)
@@ -60,7 +65,15 @@ async fn main(_spawner: Spawner) {
     let mut pixels: PixelArray = [Pixel::BLACK; NUM_PIXELS];
     let mut pulsecodes: PulseCodeArray = [0; NUM_PIXELS * 3 * 4];
 
-    // The first burst doesn't get interpreted right, if we don't send zero pulse and wait a bit
+    // When starting the spi, it will idle as high, which means that
+    // from the point of view of the ws2812b we have already started
+    // transmissing.
+    //
+    // While esp-hal configures the spi to idle as low, but this only takes
+    // effect after the first transmission.
+    //
+    // To fix this, we transmit a burst of zeros. To also get the ws2812b to
+    // abort the current transmission, we wait for 50 µs to reset it.
     spidma.write_async(&[0]).await.unwrap();
     Timer::after(Duration::from_micros(50)).await;
 
