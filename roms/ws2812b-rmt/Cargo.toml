@@ -1,6 +1,6 @@
 [package]
 edition = "2024"
-name = "ws1812b-spi"
+name = "ws2812b-rmt"
 version = "0.1.0"
 
 [dependencies]

@@ -4,15 +4,7 @@
 use embassy_executor::Spawner;
 use embassy_time::{Duration, Timer};
 use esp_backtrace as _;
-use esp_hal::{
-    clock::CpuClock,
-    dma, dma_buffers,
-    gpio::Level,
-    rmt::{PulseCode, Rmt, TxChannelAsync, TxChannelConfig, TxChannelCreatorAsync},
-    rng::Rng,
-    spi,
-    time::Rate,
-};
+use esp_hal::{clock::CpuClock, dma, dma_buffers, rng::Rng, spi, time::Rate};
 use esp_hal_embassy::main;
 use esp_println::println;
 

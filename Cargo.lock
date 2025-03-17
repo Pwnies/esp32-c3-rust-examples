@@ -1304,7 +1304,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "ws1812b-rmt"
+name = "ws2812b-rmt"
 version = "0.1.0"
 dependencies = [
  "embassy-executor",
@@ -1317,7 +1317,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "ws1812b-spi"
+name = "ws2812b-spi"
 version = "0.1.0"
 dependencies = [
  "embassy-executor",
