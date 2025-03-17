@@ -47,7 +47,7 @@ async fn main(_spawner: Spawner) {
     let (rx_buffer, rx_descriptors, tx_buffer, tx_descriptors) = dma_buffers!(3 * 3 * NUM_PIXELS);
     let dma_rx_buf = dma::DmaRxBuf::new(rx_descriptors, rx_buffer).unwrap();
     let dma_tx_buf = dma::DmaTxBuf::new(tx_descriptors, tx_buffer).unwrap();
-    // The frequency 2857kHz is chosen because 1/2857kHz ~= 350.018 ns, which is pretty close to
+    // The frequency 2857kHz was chosen because 1/2857kHz ~= 350.018 ns, which is pretty close to
     // our desired pulse length
     //
     // However since this exact frequency is not supported by the spi and instead esp-hal will
@@ -67,15 +67,15 @@ async fn main(_spawner: Spawner) {
 
     // When starting the spi, it will idle as high, which means that
     // from the point of view of the ws2812b we have already started
-    // transmissing.
+    // transmissing at this point.
     //
-    // While esp-hal configures the spi to idle as low, but this only takes
+    // While esp-hal configures the spi to idle as low, this only takes
     // effect after the first transmission.
     //
     // To fix this, we transmit a burst of zeros. To also get the ws2812b to
-    // abort the current transmission, we wait for 50 µs to reset it.
+    // abort the current transmission, we wait for 100 µs in order to reset it.
     spidma.write_async(&[0]).await.unwrap();
-    Timer::after(Duration::from_micros(50)).await;
+    Timer::after(Duration::from_micros(100)).await;
 
     loop {
         for p in &mut pixels {
@@ -97,16 +97,16 @@ async fn main(_spawner: Spawner) {
 }
 
 fn pixel_to_pulsecodes(byte: u8) -> [u8; 4] {
-    let mut out = [0; 4];
-    for b in 0..8 {
-        let bitpos = 7 - b;
-        let bit = byte & (1 << bitpos) != 0;
-        match (b & 1 != 0, bit) {
-            (false, false) => out[b / 2] |= ZERO_PULSE << 4,
-            (false, true) => out[b / 2] |= ONE_PULSE << 4,
-            (true, false) => out[b / 2] |= ZERO_PULSE,
-            (true, true) => out[b / 2] |= ONE_PULSE,
-        }
-    }
-    out
+    const PULSECODES: [u8; 4] = [
+        ZERO_PULSE << 4 | ZERO_PULSE,
+        ZERO_PULSE << 4 | ONE_PULSE,
+        ONE_PULSE << 4 | ZERO_PULSE,
+        ONE_PULSE << 4 | ONE_PULSE,
+    ];
+    [
+        PULSECODES[((byte >> 6) & 0b11) as usize],
+        PULSECODES[((byte >> 4) & 0b11) as usize],
+        PULSECODES[((byte >> 2) & 0b11) as usize],
+        PULSECODES[((byte >> 0) & 0b11) as usize],
+    ]
 }
