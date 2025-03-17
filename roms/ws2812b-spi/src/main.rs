@@ -62,7 +62,7 @@ async fn main(_spawner: Spawner) {
 
     // The first burst doesn't get interpreted right, if we don't send zero pulse and wait a bit
     spidma.write_async(&[0]).await.unwrap();
-    Timer::after(Duration::from_micros(200)).await;
+    Timer::after(Duration::from_micros(50)).await;
 
     loop {
         for p in &mut pixels {
