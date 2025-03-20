@@ -1,6 +1,9 @@
 #![no_std]
 #![no_main]
 
+#[macro_use]
+mod macros;
+
 use embassy_executor::Spawner;
 use embassy_time::{Duration, Timer};
 use esp_backtrace as _;
@@ -8,7 +11,7 @@ use esp_hal::{clock::CpuClock, dma, dma_buffers, rng::Rng, spi, time::Rate};
 use esp_hal_embassy::main;
 use esp_println::println;
 
-const NUM_PIXELS: usize = 16;
+const NUM_PIXELS: usize = 600;
 
 #[derive(Copy, Clone, Debug)]
 struct Pixel {
@@ -40,8 +43,6 @@ async fn main(_spawner: Spawner) {
 
     println!("Embassy initialized!");
 
-    Timer::after(Duration::from_secs(1)).await;
-
     let mut rng = Rng::new(peripherals.RNG);
 
     let (rx_buffer, rx_descriptors, tx_buffer, tx_descriptors) = dma_buffers!(3 * 3 * NUM_PIXELS);
@@ -62,8 +63,8 @@ async fn main(_spawner: Spawner) {
         .with_buffers(dma_rx_buf, dma_tx_buf)
         .into_async();
 
-    let mut pixels: PixelArray = [Pixel::BLACK; NUM_PIXELS];
-    let mut pulsecodes: PulseCodeArray = [0; NUM_PIXELS * 3 * 4];
+    let pixels = mk_static!(PixelArray, [Pixel::BLACK; NUM_PIXELS]);
+    let pulsecodes = mk_static!(PulseCodeArray, [0; NUM_PIXELS * 3 * 4]);
 
     // When starting the spi, it will idle as high, which means that
     // from the point of view of the ws2812b we have already started
@@ -78,7 +79,7 @@ async fn main(_spawner: Spawner) {
     Timer::after(Duration::from_micros(100)).await;
 
     loop {
-        for p in &mut pixels {
+        for p in &mut *pixels {
             let d = rng.random();
             p.r = (d as u8) & 0x7;
             p.g = ((d >> 8) as u8) & 0x7;
@@ -91,7 +92,7 @@ async fn main(_spawner: Spawner) {
             pulsecode[8..12].copy_from_slice(&pixel_to_pulsecodes(pixel.b));
         }
 
-        spidma.write_async(&pulsecodes).await.unwrap();
+        spidma.write_async(&*pulsecodes).await.unwrap();
         Timer::after(Duration::from_secs(1)).await;
     }
 }

@@ -1327,6 +1327,7 @@ dependencies = [
  "esp-hal",
  "esp-hal-embassy",
  "esp-println",
+ "static_cell",
 ]
 
 [[package]]
