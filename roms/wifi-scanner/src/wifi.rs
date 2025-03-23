@@ -8,14 +8,14 @@ use esp_println::println;
 use esp_wifi::{EspWifiController, wifi::ScanConfig};
 
 pub(crate) async fn run_scanner(
-    timg0_timer0: esp_hal::timer::timg::Timer,
+    timer: esp_hal::timer::timg::Timer,
     rng: Rng,
     radio_clk: impl Peripheral<P = RADIO_CLK> + 'static,
     wifi: impl Peripheral<P = WIFI> + 'static,
 ) -> ! {
     let init = &*mk_static!(
         EspWifiController<'static>,
-        esp_wifi::init(timg0_timer0, rng, radio_clk).unwrap()
+        esp_wifi::init(timer, rng, radio_clk).unwrap()
     );
 
     let (mut controller, _) = esp_wifi::wifi::new(&init, wifi).unwrap();

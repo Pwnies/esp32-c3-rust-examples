@@ -523,6 +523,36 @@ dependencies = [
 ]
 
 [[package]]
+name = "esp-now-receiver"
+version = "0.1.0"
+dependencies = [
+ "embassy-executor",
+ "embassy-time",
+ "esp-alloc",
+ "esp-backtrace",
+ "esp-hal",
+ "esp-hal-embassy",
+ "esp-println",
+ "esp-wifi",
+ "static_cell",
+]
+
+[[package]]
+name = "esp-now-sender"
+version = "0.1.0"
+dependencies = [
+ "embassy-executor",
+ "embassy-time",
+ "esp-alloc",
+ "esp-backtrace",
+ "esp-hal",
+ "esp-hal-embassy",
+ "esp-println",
+ "esp-wifi",
+ "static_cell",
+]
+
+[[package]]
 name = "esp-println"
 version = "0.13.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"

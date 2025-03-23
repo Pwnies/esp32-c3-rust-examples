@@ -19,14 +19,14 @@ const PASSWORD: &str = env!("PASSWORD");
 
 pub(crate) fn init_wifi(
     spawner: &Spawner,
-    timg0_timer0: esp_hal::timer::timg::Timer,
+    timer: esp_hal::timer::timg::Timer,
     mut rng: Rng,
     radio_clk: impl Peripheral<P = RADIO_CLK> + 'static,
     wifi: impl Peripheral<P = WIFI> + 'static,
 ) -> Stack<'static> {
     let init = mk_static!(
         EspWifiController<'static>,
-        esp_wifi::init(timg0_timer0, rng, radio_clk).unwrap()
+        esp_wifi::init(timer, rng, radio_clk).unwrap()
     );
 
     let (controller, wifi_interfaces) = esp_wifi::wifi::new(init, wifi).unwrap();
