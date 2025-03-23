@@ -12,6 +12,8 @@ use esp_hal_embassy::main;
 use esp_println::println;
 
 const NUM_PIXELS: usize = 600;
+// 3 colors per pixel, 1 byte per color, 4 bits of spi data per bit of color data
+const NUM_SPI_BYTES: usize = NUM_PIXELS * 3 * 4;
 
 #[derive(Copy, Clone, Debug)]
 struct Pixel {
@@ -25,8 +27,7 @@ impl Pixel {
 }
 
 type PixelArray = [Pixel; NUM_PIXELS];
-// 3 colors per pixel, 4 bits of spi data per bit of color data
-type PulseCodeArray = [u8; NUM_PIXELS * 3 * 4];
+type PulseCodeArray = [u8; NUM_SPI_BYTES];
 
 // This corresponds to 350ns of high followed by 1050s of low
 const ZERO_PULSE: u8 = 0b1000;
@@ -45,7 +46,7 @@ async fn main(_spawner: Spawner) {
 
     let mut rng = Rng::new(peripherals.RNG);
 
-    let (rx_buffer, rx_descriptors, tx_buffer, tx_descriptors) = dma_buffers!(3 * 3 * NUM_PIXELS);
+    let (rx_buffer, rx_descriptors, tx_buffer, tx_descriptors) = dma_buffers!(NUM_SPI_BYTES);
     let dma_rx_buf = dma::DmaRxBuf::new(rx_descriptors, rx_buffer).unwrap();
     let dma_tx_buf = dma::DmaTxBuf::new(tx_descriptors, tx_buffer).unwrap();
     // The frequency 2857kHz was chosen because 1/2857kHz ~= 350.018 ns, which is pretty close to
@@ -64,7 +65,7 @@ async fn main(_spawner: Spawner) {
         .into_async();
 
     let pixels = mk_static!(PixelArray, [Pixel::BLACK; NUM_PIXELS]);
-    let pulsecodes = mk_static!(PulseCodeArray, [0; NUM_PIXELS * 3 * 4]);
+    let pulsecodes = mk_static!(PulseCodeArray, [0; NUM_SPI_BYTES]);
 
     // When starting the spi, it will idle as high, which means that
     // from the point of view of the ws2812b we have already started
