@@ -5,11 +5,10 @@
 mod macros;
 
 use embassy_executor::Spawner;
-use embassy_time::Timer;
 use esp_backtrace as _;
 use esp_hal::{clock::CpuClock, rng::Rng, timer::timg::TimerGroup};
 use esp_println::println;
-use esp_wifi::{EspWifiController, esp_now::BROADCAST_ADDRESS};
+use esp_wifi::EspWifiController;
 
 #[esp_hal_embassy::main]
 async fn main(_spawner: Spawner) -> ! {
@@ -31,13 +30,10 @@ async fn main(_spawner: Spawner) -> ! {
     );
 
     let mut esp_now = esp_wifi::esp_now::EspNow::new(&init, peripherals.WIFI).unwrap();
+    println!("ESP-NOW version: {:?}", esp_now.version().unwrap());
 
     loop {
-        if let Err(e) = esp_now.send_async(&BROADCAST_ADDRESS, b"test").await {
-            println!("Error while sending: {e:?}");
-        } else {
-            println!("Ping sent");
-        }
-        Timer::after_secs(1).await;
+        let received = esp_now.receive_async().await;
+        println!("{received:?}");
     }
 }

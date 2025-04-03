@@ -523,7 +523,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "esp-now-receiver"
+name = "esp-now-broadcast-receiver"
 version = "0.1.0"
 dependencies = [
  "embassy-executor",
@@ -538,7 +538,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "esp-now-sender"
+name = "esp-now-broadcast-sender"
 version = "0.1.0"
 dependencies = [
  "embassy-executor",
@@ -549,6 +549,23 @@ dependencies = [
  "esp-hal-embassy",
  "esp-println",
  "esp-wifi",
+ "static_cell",
+]
+
+[[package]]
+name = "esp-now-peering"
+version = "0.1.0"
+dependencies = [
+ "embassy-executor",
+ "embassy-sync",
+ "embassy-time",
+ "esp-alloc",
+ "esp-backtrace",
+ "esp-hal",
+ "esp-hal-embassy",
+ "esp-println",
+ "esp-wifi",
+ "heapless",
  "static_cell",
 ]
 

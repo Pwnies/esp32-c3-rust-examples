@@ -1,5 +1,5 @@
 [package]
-name = "esp-now-sender"
+name = "esp-now-broadcast-receiver"
 version = "0.1.0"
 edition = "2024"
 
