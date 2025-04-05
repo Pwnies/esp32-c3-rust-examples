@@ -34,6 +34,9 @@ async fn main(_spawner: Spawner) {
         let Ok(n) = uart0.read_async(&mut buf).await else {
             continue;
         };
+        for b in &mut buf[..n] {
+            *b = b.wrapping_add(5);
+        }
         let Ok(_) = uart0.write_all(&buf[..n]).await else {
             continue;
         };
