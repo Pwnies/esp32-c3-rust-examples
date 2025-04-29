@@ -1182,6 +1182,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "uart-announcer"
+version = "0.1.0"
+dependencies = [
+ "embassy-executor",
+ "embassy-time",
+ "embedded-io-async",
+ "esp-hal",
+ "esp-hal-embassy",
+]
+
+[[package]]
 name = "uart-echo-server"
 version = "0.1.0"
 dependencies = [

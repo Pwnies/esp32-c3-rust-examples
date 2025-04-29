@@ -22,6 +22,7 @@ pub(crate) async fn run_scanner(
 
     println!("start connection task");
     println!("Device capabilities: {:?}", controller.capabilities());
+    controller.set_mode(esp_wifi::wifi::WifiMode::Sta).unwrap();
     loop {
         if !matches!(controller.is_started(), Ok(true)) {
             println!("Starting wifi");

@@ -1,0 +1,11 @@
+[package]
+edition = "2024"
+name = "uart-announcer"
+version = "0.1.0"
+
+[dependencies]
+embassy-executor = "0.7.0"
+embassy-time = { version = "0.4.0", features = ["generic-queue-8"] }
+embedded-io-async = "0.6.1"
+esp-hal = { version = "1.0.0-beta.0", features = ["esp32c3", "unstable"] }
+esp-hal-embassy = { version = "0.7.0", features = ["esp32c3"] }
